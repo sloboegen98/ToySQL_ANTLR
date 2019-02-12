@@ -1,0 +1,3 @@
+SELECT * 
+FROM A,B
+WHERE A.x = B.x;

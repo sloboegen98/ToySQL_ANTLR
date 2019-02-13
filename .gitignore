@@ -3,3 +3,4 @@ parsertestexe
 *.interp
 *Lexer.*
 *Parser.*
+*.o

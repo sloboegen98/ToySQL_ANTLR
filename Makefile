@@ -1,7 +1,8 @@
 CC = g++
 LIBPATH = -L/usr/local/lib
-LINK = -lantlr4-runtime
+LINK 	= -lantlr4-runtime
 INCLUDE = -I/usr/local/include/antlr4-runtime 
+ANTLR 	= java -Xmx500M -cp "/usr/local/lib/antlr-4.7.1-complete.jar:$CLASSPATH" org.antlr.v4.Tool
 
 all: antlr parsertestexe 
 
@@ -21,7 +22,7 @@ query.o: Query.cpp Query.h
 	$(CC) Query.cpp -c -o query.o
 
 antlr:
-	java -Xmx500M -cp "/usr/local/lib/antlr-4.7.1-complete.jar:$CLASSPATH" org.antlr.v4.Tool ToySQL.g4 -Dlanguage=Cpp -no-listener -no-visitor
+	$(ANTLR) ToySQL.g4 -Dlanguage=Cpp -no-listener -no-visitor
 
 clean:
 	rm -rf query.o lexer.o parser.o main.o

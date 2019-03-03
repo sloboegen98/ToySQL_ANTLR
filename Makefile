@@ -22,7 +22,7 @@ query.o: Query.cpp Query.h
 	$(CC) Query.cpp -c -o query.o
 
 antlr:
-	$(ANTLR) ToySQL.g4 -Dlanguage=Cpp -no-listener -no-visitor
+	$(ANTLR) ToySQL.g4 -Dlanguage=Cpp -no-listener -visitor
 
 clean:
 	rm -rf query.o lexer.o parser.o main.o

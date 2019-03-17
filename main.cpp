@@ -4,13 +4,14 @@
 #include <strstream>
 
 #include "antlr4-runtime.h"
-#include "ToySQLLexer.h"
-#include "ToySQLParser.h"
+#include "parser/ToySQLLexer.h"
+#include "parser/ToySQLParser.h"
 
-#include "MyVisitor.h"
-#include "Query.h"
+#include "parser/MyVisitor.h"
+#include "src/Query.h"
 
 int main(int args, char* argv[]) {
+
     std::ifstream input_string;
     input_string.open(argv[1]);
     antlr4::ANTLRInputStream input(input_string);

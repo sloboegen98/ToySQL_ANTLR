@@ -1,0 +1,11 @@
+ATTRIBUTES:
+	A.x
+	B.y
+TABLES:
+	A
+	B
+PREDICATE:
+	A.x = 1
+	A.y > 2
+	B.z = "word"
+	B.z = A.z

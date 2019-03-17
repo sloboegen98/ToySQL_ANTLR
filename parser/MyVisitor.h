@@ -1,5 +1,5 @@
 #include "ToySQLBaseVisitor.h"
-#include "Query.h"
+#include "../src/Query.h"
 
 
 class MyVisitor : public ToySQLBaseVisitor {
@@ -23,16 +23,16 @@ public:
 
     antlrcpp::Any visitSelparams(ToySQLParser::SelparamsContext *ctx) override {
         std::vector<antlr4::tree::TerminalNode *> vec_attrs = ctx->ATTRNAME();
-        auto all = ctx->ALL();
-
-        if (all != nullptr) {
+    
+        if (ctx->ALL() != nullptr) {
             (q_.selattrs).push_back("ALL");
         } 
         else if (vec_attrs.size() != 0) {
             for (auto &attr : vec_attrs) {
                 (q_.selattrs).push_back(attr->getText());
+                std::cout << attr << std::endl;
             }
-        } 
+    }
 
         return visitChildren(ctx);
     }

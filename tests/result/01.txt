@@ -1,0 +1,7 @@
+ATTRIBUTES:
+	ALL
+TABLES:
+	A
+	B
+PREDICATE:
+	A.x = B.x

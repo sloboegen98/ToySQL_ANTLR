@@ -3,4 +3,6 @@ parsertestexe
 *.interp
 *Lexer.*
 *Parser.*
+ToySQLBaseVisitor.*
+ToySQLVisitor.*
 *.o

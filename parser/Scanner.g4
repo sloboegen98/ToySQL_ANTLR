@@ -7,11 +7,13 @@ WHERE    : W H E R E                 ;
 ALL      : '*'                       ;
 AND      : A N D                     ;
 OR       : O R                       ; 
+AS       : A S                       ;
 
 WS       : [ \t\r\n]+ -> skip        ;
 
-ATTRNAME : [A-Z]+'.'([a-z]|DIGIT)+   ;
 TABLENAME: [A-Z]+                    ;
+ATTRNAME : TABLENAME'.'([a-z]|DIGIT)+;
+ALIAS    : [a-z]+                    ;
 NUMBER   : ('-')?DIGIT+('.'DIGIT+)?  ;
 WORD     : '"' ([A-Z]|[a-z])+ '"'    ;
 

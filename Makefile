@@ -1,4 +1,6 @@
 CC = g++
+CFLAGS = -std=c++17 -g
+
 LIBPATH = -L/usr/local/lib
 LINK 	= -lantlr4-runtime
 INCLUDE = -I/usr/local/include/antlr4-runtime 
@@ -6,25 +8,29 @@ ANTLR 	= java -Xmx500M -cp "/usr/local/lib/antlr-4.7.1-complete.jar:$CLASSPATH" 
 
 all: antlr parsertestexe 
 
-parsertestexe: query.o lexer.o parser.o main.o
-	$(CC) main.o query.o lexer.o parser.o $(INCLUDE) $(LINK) $(LIBPATH) -std=c++17 -o parsertestexe 
+parsertestexe: src/query.o parser/lexer.o parser/parser.o main.o
+	$(CC) $^ $(INCLUDE) $(LINK) $(LIBPATH) $(CFLAGS) -o $@
 
-parser.o: ToySQLParser.cpp ToySQLParser.h
-	$(CC) ToySQLParser.cpp $(INCLUDE) $(LINK) $(LIBPATH) -std=c++17 -c -o parser.o
+parser/parser.o: parser/ToySQLParser.cpp
+	$(CC) $^ $(INCLUDE) $(LINK) $(LIBPATH) $(CFLAGS) -c -o $@
 
-lexer.o: ToySQLLexer.cpp ToySQLLexer.h
-	$(CC) ToySQLLexer.cpp $(INCLUDE) $(LINK) $(LIBPATH) -std=c++17 -c -o lexer.o
+parser/lexer.o: parser/ToySQLLexer.cpp 
+	$(CC) $^ $(INCLUDE) $(LINK) $(LIBPATH) $(CFLAGS) -c -o $@
 
 main.o: main.cpp
-	$(CC) main.cpp $(INCLUDE) $(LINK) $(LIBPATH) -std=c++17 -c
+	$(CC) $^ $(INCLUDE) $(LINK) $(LIBPATH) $(CFLAGS) -c
 
-query.o: Query.cpp Query.h
-	$(CC) Query.cpp -c -o query.o
+src/query.o: src/Query.cpp 
+	$(CC) $^ $(CFLAGS) -c -o $@
 
-antlr:
-	$(ANTLR) ToySQL.g4 -Dlanguage=Cpp -no-listener -visitor
+antlr: parser/ToySQL.g4 
+	$(ANTLR) $^ -Dlanguage=Cpp -no-listener -visitor
+
+test:	
+	cd tests/ && ./run.sh	
 
 clean:
-	rm -rf query.o lexer.o parser.o main.o
+	rm -f parsertestexe 
+	rm -f query.o lexer.o parser.o main.o 
 
 .PHONY: all clean

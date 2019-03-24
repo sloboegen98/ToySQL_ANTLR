@@ -6,3 +6,4 @@ parsertestexe
 ToySQLBaseVisitor.*
 ToySQLVisitor.*
 *.o
+.vscode

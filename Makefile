@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -std=c++17 -g
+CFLAGS = -std=c++17 -g -Wall
 
 LIBPATH = -L/usr/local/lib
 LINK 	= -lantlr4-runtime
@@ -8,7 +8,7 @@ ANTLR 	= java -Xmx500M -cp "/usr/local/lib/antlr-4.7.1-complete.jar:$CLASSPATH" 
 
 all: antlr parsertestexe 
 
-parsertestexe: src/query.o parser/lexer.o parser/parser.o main.o
+parsertestexe: main.o src/query.o parser/lexer.o parser/parser.o
 	$(CC) $^ $(INCLUDE) $(LINK) $(LIBPATH) $(CFLAGS) -o $@
 
 parser/parser.o: parser/ToySQLParser.cpp
@@ -17,11 +17,11 @@ parser/parser.o: parser/ToySQLParser.cpp
 parser/lexer.o: parser/ToySQLLexer.cpp 
 	$(CC) $^ $(INCLUDE) $(LINK) $(LIBPATH) $(CFLAGS) -c -o $@
 
-main.o: main.cpp
-	$(CC) $^ $(INCLUDE) $(LINK) $(LIBPATH) $(CFLAGS) -c
+main.o: main.cpp parser/MyVisitor.h
+	$(CC) main.cpp $(INCLUDE) $(LINK) $(LIBPATH) $(CFLAGS) -c
 
-src/query.o: src/Query.cpp 
-	$(CC) $^ $(CFLAGS) -c -o $@
+src/query.o: src/Query.cpp src/Query.h
+	$(CC) src/Query.cpp $(CFLAGS) -c -o $@
 
 antlr: parser/ToySQL.g4 
 	$(ANTLR) $^ -Dlanguage=Cpp -no-listener -visitor

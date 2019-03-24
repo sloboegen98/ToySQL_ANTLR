@@ -1,0 +1,2 @@
+SELECT A.x, B.x 
+FROM A;

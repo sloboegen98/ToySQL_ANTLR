@@ -20,13 +20,13 @@ basic_query
 
 selparams
     :
-    ATTRNAME (AS ALIAS)? (',' ATTRNAME (AS ALIAS)?)*
+    result_column (',' result_column)*
     | ALL
     ;
 
 frparams 
     :
-    TABLENAME (AS ALIAS)? (',' TABLENAME (AS ALIAS)?)*
+    from_table (',' from_table)*
     ;
 
 whparams
@@ -37,11 +37,13 @@ whparams
 
 whparam
     :
-    (ATTRNAME | ALIAS) relation
-    (ATTRNAME 
+    whparam_left relation whparam_right
+    ;
+
+whparam_left
+    :
+    ATTRNAME
     | ALIAS
-    | WORD
-    | NUMBER)
     ;
 
 relation
@@ -49,4 +51,22 @@ relation
       '=' 
     | '<'
     | '>'
+    ;
+
+whparam_right
+    :
+    ATTRNAME
+    | ALIAS
+    | NUMBER
+    | WORD
+    ;
+
+result_column
+    :
+    ATTRNAME (AS ALIAS)?
+    ; 
+
+from_table
+    :
+    TABLENAME (AS ALIAS)?
     ;

@@ -1,0 +1,11 @@
+ATTRIBUTES:
+	A.x AS: ax
+	A.x AS: axx
+	B.z AS: bz
+TABLES:
+	A
+	B
+PREDICATE:
+	A.x = 1
+	A.x = 2
+	B.z = "hello"

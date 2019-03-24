@@ -28,6 +28,13 @@ int main(int args, char* argv[]) {
     visitor->visit(tree);
     
     Query q = visitor->get();
+    q.remove_alias();
+
+    if (!(q.check_correct())) {
+        std::cout << "Incorrect query!!!\n";
+        return 1;
+    }
+
     q.print();
 
     return 0;

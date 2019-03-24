@@ -1,0 +1,2 @@
+Incorrect alias b
+Incorrect query!!!

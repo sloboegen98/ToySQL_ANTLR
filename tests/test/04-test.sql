@@ -1,0 +1,3 @@
+SELECT A.x AS a
+FROM A
+WHERE b = 1;

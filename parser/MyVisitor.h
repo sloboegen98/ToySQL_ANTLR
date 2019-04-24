@@ -1,3 +1,5 @@
+#pragma once
+
 #include "ToySQLBaseVisitor.h"
 #include "../src/Query.h"
 
@@ -6,28 +8,16 @@
 
 class MyVisitor : public ToySQLBaseVisitor {
 
-    Query q_;
+    Query query;
 
 //----------------------START ACTION----------------------//
 
 public:
-    antlrcpp::Any visitQuery(ToySQLParser::QueryContext *ctx) override {  
-        return visitChildren(ctx);
-    }
-
-    antlrcpp::Any visitWhole_query(ToySQLParser::Whole_queryContext *ctx) override {
-        return visitChildren(ctx);
-    }
-
-    antlrcpp::Any visitBasic_query(ToySQLParser::Basic_queryContext *ctx) override {
-        return visitChildren(ctx);
-    }
-
     antlrcpp::Any visitSelparams(ToySQLParser::SelparamsContext *ctx) override {
         std::vector<ToySQLParser::Result_columnContext *> vec_attrs = ctx->result_column();
 
         if (ctx->ALL() != nullptr) {
-            (q_.selattrs).push_back(Column("ALL"));
+            (query.selattrs).push_back(Column("ALL"));
         } 
         else if (vec_attrs.size() != 0) {
             for (auto& attrname : vec_attrs) {
@@ -35,11 +25,11 @@ public:
                 auto alias = attrname->ALIAS();
 
                 if (alias == nullptr) {
-                    (q_.selattrs).push_back(Column(attr->getText()));
+                    (query.selattrs).push_back(Column(attr->getText()));
                 }
                 else {
-                    (q_.attrs_alias)[alias->getText()] = attr->getText();
-                    (q_.selattrs).push_back(Column(attr->getText(), alias->getText()));
+                    (query.attrs_alias)[alias->getText()] = attr->getText();
+                    (query.selattrs).push_back(Column(attr->getText(), alias->getText()));
                 }
             }
         }
@@ -49,24 +39,19 @@ public:
 
     antlrcpp::Any visitFrparams(ToySQLParser::FrparamsContext *ctx) override {
         std::vector<ToySQLParser::From_tableContext *> vec_tables = ctx->from_table();
-        
         for (auto &table : vec_tables) {
             auto tbl = table->TABLENAME();
             auto alias = table->ALIAS();
-            (q_.useful_tables).insert(tbl->getText());
+            (query.useful_tables).insert(tbl->getText());
 
             if (alias == nullptr) {
-                (q_.from).push_back(Table(tbl->getText()));
+                (query.from).push_back(Table(tbl->getText()));
             } else {
-                (q_.tables_alias)[alias->getText()] = table->getText();
-                (q_.from).push_back(Table(tbl->getText(), alias->getText()));
+                (query.tables_alias)[alias->getText()] = table->getText();
+                (query.from).push_back(Table(tbl->getText(), alias->getText()));
             }            
         }
 
-        return visitChildren(ctx);
-    }
-
-    antlrcpp::Any visitWhparams(ToySQLParser::WhparamsContext *ctx) override {
         return visitChildren(ctx);
     }
 
@@ -102,25 +87,13 @@ public:
         }
        
         Predicate pr = Predicate(lhs, rhs, rel, lt, rt);
-        (q_.where).push_back(pr);
+        (query.where).push_back(pr);
 
-        return visitChildren(ctx);
-    }
-
-    antlrcpp::Any visitRelation(ToySQLParser::RelationContext *ctx) override {
-        return visitChildren(ctx);
-    }
-
-    antlrcpp::Any visitResult_column(ToySQLParser::Result_columnContext *ctx) override {
-        return visitChildren(ctx);
-     }
-
-    antlrcpp::Any visitFrom_table(ToySQLParser::From_tableContext *ctx) override {
         return visitChildren(ctx);
     }
 
 //----------------------END ACTION----------------------//
 
-    Query get() { return q_; }
+    Query get() { return query; }
 
 };

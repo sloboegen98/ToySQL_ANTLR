@@ -1,5 +1,4 @@
-#ifndef QUERY_HPP
-#define QUERY_HPP
+#pragma once 
 
 #include <vector>
 #include <unordered_map>
@@ -18,9 +17,9 @@ struct Predicate {
     LeftType left_type;
     RightType right_type;
 
-    Predicate(std::string const& l, std::string const& r, char rel_,
+    Predicate(std::string const& l, std::string const& r, char rel,
               LeftType lt, RightType rt) :
-        left(l), right(r), rel(rel_), left_type(lt), right_type(rt) {}
+        left(l), right(r), rel(rel), left_type(lt), right_type(rt) {}
 
     friend std::ostream& operator<< (std::ostream& out, const Predicate& pr) {
         out << '\t' << pr.left << ' ' << pr.rel << ' ' << pr.right;
@@ -32,13 +31,10 @@ struct Column {
     std::string name;
     std::string alias;
 
-    Column(std::string const& name_, std::string const& alias_ = "") : 
-        name(name_) {
-        if (alias_ != "")
-            alias = alias_;
-    }
+    Column(std::string const& name, std::string const& alias = "") : 
+        name(name), alias(alias) {}
 
-    friend std::ostream& operator<< (std::ostream& out, const Column& col) {
+    friend std::ostream& operator<< (std::ostream& out, Column const& col) {
         out << col.name;
         if (col.alias != "")
             out << " AS: " << col.alias;
@@ -50,13 +46,10 @@ struct Table {
     std::string name;
     std::string alias;
 
-    Table(std::string const& name_, std::string const& alias_ = "") : 
-        name(name_) {
-        if (alias_ != "")
-            alias = alias_;
-    }
+    Table(std::string const& name, std::string const& alias = "") : 
+        name(name), alias(alias) {}
 
-    friend std::ostream& operator<< (std::ostream& out, const Table& tbl) {
+    friend std::ostream& operator<< (std::ostream& out, Table const& tbl) {
         out << tbl.name;
         if (tbl.alias != "")
             out << " AS: " << tbl.alias;
@@ -79,5 +72,3 @@ struct Query {
     bool check_correct();
     std::string table_from_attr(std::string const &attr);
 };
-
-#endif // QUERY_HPP
